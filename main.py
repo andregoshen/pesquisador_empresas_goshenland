@@ -77,6 +77,11 @@ review_task = Task(
     agent=report_reviewer,
 )
 
+# Rota de teste para a raiz
+@app.get("/")
+def root():
+    return {"message": "API está funcionando! Use o endpoint /run-crew para executar a Crew."}
+
 # Endpoint para executar a Crew
 @app.post("/run-crew")
 def run_crew(input_data: CompanyInput):
