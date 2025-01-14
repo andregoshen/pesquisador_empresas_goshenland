@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
+from datetime import datetime
 import os
 
 # Configurações de ambiente
@@ -60,7 +61,9 @@ company_task = Task(
 
 report_task = Task(
     description=(
-        "Com base nas informações fornecidas pelos outros agentes e as informações do input inicial, crie um relatório completo da {company_name} para a reunião de venda que inclua análises completas da {company_name}."
+        "Com base nas informações fornecidas pelos outros agentes e as informações do input inicial, "
+        "crie um relatório completo da {company_name} para a reunião de venda que inclua análises completas. "
+        "Inclua a data e hora atuais: {current_datetime}."
     ),
     expected_output="Relatório estratégico e visualmente atrativo, listando todos os dados pesquisados.",
     agent=report_generator,
@@ -85,6 +88,9 @@ def root():
 # Endpoint para executar a Crew
 @app.post("/run-crew")
 def run_crew(input_data: CompanyInput):
+    # Captura a data e hora atuais
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     # Crie a Crew
     crew = Crew(
         agents=[company_enricher, report_generator, report_reviewer],
@@ -95,8 +101,15 @@ def run_crew(input_data: CompanyInput):
     
     # Execute a Crew
     try:
-        result = crew.kickoff(inputs={"company_name": input_data.company_name})
-        return {"status": "success", "data": result}
+        result = crew.kickoff(inputs={
+            "company_name": input_data.company_name,
+            "current_datetime": now  # Adiciona a data e hora como entrada
+        })
+        return {
+            "status": "success",
+            "data": result,
+            "timestamp": now  # Adiciona a data e hora no retorno da API
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
