@@ -7,7 +7,7 @@ import os
 
 # Configurações de ambiente
 os.environ["SERPER_API_KEY"] = "858d840548fd3a36161d5f345706e9d77e672e9f"
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 
 # Configurando o app FastAPI
 app = FastAPI()
