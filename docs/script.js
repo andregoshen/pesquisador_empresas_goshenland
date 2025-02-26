@@ -20,7 +20,12 @@ async function buscarDados() {
         }
 
         const dados = await resposta.json();
-        document.getElementById("resultado").innerText = JSON.stringify(dados, null, 2);
+        
+        // Captura apenas o relatório final dentro do JSON
+        const relatorioFinal = dados.data.raw || "Nenhum relatório encontrado.";
+
+        // Atualiza a página com o relatório final formatado
+        document.getElementById("resultado").innerHTML = `<h2>Relatório Estratégico</h2><p>${relatorioFinal.replace(/\n/g, "<br>")}</p>`;
     } catch (erro) {
         document.getElementById("resultado").innerText = "Erro ao buscar dados: " + erro.message;
     }
