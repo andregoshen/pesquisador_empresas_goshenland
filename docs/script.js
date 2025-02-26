@@ -7,7 +7,7 @@ async function buscarDados() {
     }
 
     try {
-        const resposta = await fetch("https://pesquisador.onrender.com", {
+        const resposta = await fetch("https://pesquisador.onrender.com/run-crew", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
