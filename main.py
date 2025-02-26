@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
-from datetime import datetime
+from datetime import date
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -101,7 +101,7 @@ def root():
 @app.post("/run-crew")
 def run_crew(input_data: CompanyInput):
     # Captura a data e hora atuais
-    now = datetime.now().strftime("%d/%m/%Y")
+    now = date.today.now().strftime("%d/%m/%Y")
     
     # Crie a Crew
     crew = Crew(
