@@ -1,9 +1,24 @@
 async function buscarDados() {
+    const empresa = document.getElementById("empresa").value.trim();
+    
+    if (!empresa) {
+        document.getElementById("resultado").innerText = "Por favor, digite o nome da empresa.";
+        return;
+    }
+
     try {
-        const resposta = await fetch("https://pesquisador.onrender.com");
+        const resposta = await fetch("https://pesquisador.onrender.com", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ company_name: empresa })
+        });
+
         if (!resposta.ok) {
             throw new Error(`Erro na requisição: ${resposta.status}`);
         }
+
         const dados = await resposta.json();
         document.getElementById("resultado").innerText = JSON.stringify(dados, null, 2);
     } catch (erro) {
