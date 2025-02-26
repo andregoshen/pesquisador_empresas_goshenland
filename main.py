@@ -4,13 +4,25 @@ from crewai import Agent, Task, Crew, Process
 from crewai_tools import SerperDevTool
 from datetime import datetime
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 # Configurações de ambiente
 os.environ["SERPER_API_KEY"] = "858d840548fd3a36161d5f345706e9d77e672e9f"
-os.environ["OPENAI_API_KEY"] = "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"
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("API Key da OpenAI não encontrada! Verifique suas variáveis de ambiente.")
 
 # Configurando o app FastAPI
 app = FastAPI()
+
+# 🔹 ADICIONE ESTA CONFIGURAÇÃO PARA PERMITIR CHAMADAS DO GITHUB PAGES
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Para maior segurança, pode substituir por ["https://seu-usuario.github.io"]
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Permite todos os headers
+)
 
 # Modelo de entrada
 class CompanyInput(BaseModel):
