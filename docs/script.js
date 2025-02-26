@@ -1,10 +1,16 @@
 async function buscarDados() {
     const empresa = document.getElementById("empresa").value.trim();
-    
+    const resultadoDiv = document.getElementById("resultado");
+    const loadingMsg = document.getElementById("loading");
+
     if (!empresa) {
-        document.getElementById("resultado").innerText = "Por favor, digite o nome da empresa.";
+        resultadoDiv.innerText = "Por favor, digite o nome da empresa.";
         return;
     }
+
+    // Exibe a mensagem de carregamento
+    loadingMsg.style.display = "block";
+    resultadoDiv.innerHTML = ""; // Limpa o resultado anterior
 
     try {
         const resposta = await fetch("https://pesquisador.onrender.com/run-crew", {
@@ -25,8 +31,7 @@ async function buscarDados() {
         const relatorioFinal = dados.data.raw || "Nenhum relatório encontrado.";
 
         // Atualiza a página com o relatório final formatado
-        document.getElementById("resultado").innerHTML = `<h2>Relatório Estratégico</h2><p>${relatorioFinal.replace(/\n/g, "<br>")}</p>`;
+        resultadoDiv.innerHTML = `<h2>Relatório Estratégico</h2><p>${relatorioFinal.replace(/\n/g, "<br>")}</p>`;
     } catch (erro) {
-        document.getElementById("resultado").innerText = "Erro ao buscar dados: " + erro.message;
+        resultadoDiv.innerText = "Erro ao buscar dados: " + erro.message;
     }
-}
