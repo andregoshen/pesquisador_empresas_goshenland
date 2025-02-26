@@ -8,9 +8,10 @@ async function buscarDados() {
         return;
     }
 
-    // Exibe a mensagem de carregamento
+    // Exibe a mensagem de carregamento e força o navegador a atualizar o DOM
     loadingMsg.style.display = "block";
     resultadoDiv.innerHTML = ""; // Limpa o resultado anterior
+    await new Promise(resolve => setTimeout(resolve, 100)); // Pequeno delay para garantir atualização
 
     try {
         const resposta = await fetch("https://pesquisador.onrender.com/run-crew", {
@@ -34,4 +35,8 @@ async function buscarDados() {
         resultadoDiv.innerHTML = `<h2>Relatório Estratégico</h2><p>${relatorioFinal.replace(/\n/g, "<br>")}</p>`;
     } catch (erro) {
         resultadoDiv.innerText = "Erro ao buscar dados: " + erro.message;
+    } finally {
+        // Esconde a mensagem de carregamento quando a pesquisa termina
+        loadingMsg.style.display = "none";
     }
+}
