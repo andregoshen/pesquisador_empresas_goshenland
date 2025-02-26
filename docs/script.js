@@ -26,10 +26,13 @@ async function buscarDados() {
         const dados = await resposta.json();
         
         // Captura apenas o relatório final dentro do JSON
-        const relatorioFinal = dados.data.raw || "Nenhum relatório encontrado.";
+        const relatorioMarkdown = dados.data.raw || "**Nenhum relatório encontrado.**";
 
-        // Atualiza a página com o relatório final formatado
-        resultadoDiv.innerHTML = `<h2>Relatório Estratégico</h2><p>${relatorioFinal.replace(/\n/g, "<br>")}</p>`;
+        // Converte o Markdown para HTML
+        const relatorioHTML = marked.parse(relatorioMarkdown);
+
+        // Exibe o relatório formatado
+        resultadoDiv.innerHTML = `<h2>📋 Relatório Estratégico</h2>${relatorioHTML}`;
     } catch (erro) {
         resultadoDiv.innerHTML = `<p style="color: red;">❌ Erro ao buscar dados: ${erro.message}</p>`;
     }
