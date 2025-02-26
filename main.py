@@ -101,7 +101,7 @@ def root():
 @app.post("/run-crew")
 def run_crew(input_data: CompanyInput):
     # Captura a data e hora atuais
-    now = date.today.now().strftime("%d/%m/%Y")
+    now = date.today().strftime("%d/%m/%Y")
     
     # Crie a Crew
     crew = Crew(
